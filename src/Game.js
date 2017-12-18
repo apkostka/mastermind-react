@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import CONSTANTS from './constants';
-import './App.css';
+import './Game.css';
 
 function Peg(props) {
   const classes = `peg ${props.color} ${props.type}`;
