@@ -23,10 +23,36 @@
   to { transform: rotate(360deg); }
 }
 
+.Board {
+  width: 40%;
+  display: inline-block;
+  padding: 20px;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+ul li {
+    list-style: none;
+    display: inline-block;
+}
+
+li.PreviousGuess {
+  display: block;
+  margin: 20px 0;
+}
+li.PreviousGuess > ul {
+  display: inline-block;
+  margin-right: 40px;
+}
+
 .peg {
     display: inline-block;
     border-radius: 50%;
     border: 1px solid #999;
+    margin: 0 5px;
 }
 
 .peg.code {
