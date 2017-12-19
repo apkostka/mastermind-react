@@ -1,3 +1,12 @@
+:root {
+  --main-bg-color: #3f7bdb;
+  --main-board-color: #d18d68;
+}
+
+body {
+  background-color: var(--main-bg-color);
+}
+
 .App {
   text-align: center;
 }
@@ -24,10 +33,32 @@
 }
 
 .Board {
-  width: 40%;
   display: inline-block;
-  padding: 20px;
+  padding: 20px 40px;
+  margin-top: 10%;
+  background-color: var(--main-board-color);
+  position: relative;
+  box-shadow: 0 0 3px rgba(0,0,0,0.5);
 }
+.Board::before, .Board::after {
+  content: '';
+  position: absolute;
+  width: 102%;
+  left: -1%;
+  height: 40px;
+  background-color: var(--main-board-color);
+}
+.Board::before {
+  top: -5%;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+.Board::after {
+  bottom: -5%;
+  border-radius: 0 0 20px 20px;
+  box-shadow: 0 -1px 4px rgba(0,0,0,0.4);
+}
+
 
 ul {
   margin: 0;
@@ -39,48 +70,111 @@ ul li {
     display: inline-block;
 }
 
+ul.PreviousGuesses {
+  padding: 0 10px;
+}
 li.PreviousGuess {
   display: block;
-  margin: 20px 0;
+  margin: 25px 0;
+  position: relative;
+}
+li.PreviousGuess::after {
+  content: '';
+  width: 100%;
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  box-shadow: 0 1px 5px 0px rgba(0,0,0,0.3);
+  height: 3px;
+}
+li.PreviousGuess:last-child::after {
+  display: none;
 }
 li.PreviousGuess > ul {
   display: inline-block;
-  margin-right: 40px;
+  vertical-align: middle;
+}
+li.PreviousGuess ul.codePegs {
+  margin-right: 25px;
+}
+li.PreviousGuess ul.keyPegs {
+  width: 100px;
+  text-align: left;
 }
 
 .peg {
     display: inline-block;
     border-radius: 50%;
-    border: 1px solid #999;
+    box-shadow: 0 2px 3px 0 rgba(0,0,0,0.5);
     margin: 0 5px;
+}
+.peg.null {
+    box-shadow: 0 2px 3px 2px rgba(0,0,0,0.4) inset;
+}
+
+.currentGuess {
+  text-align: left;
+  padding: 15px 10px 10px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 5px 1px rgba(0,0,0,0.5) inset;
+  border-radius: 20px;
+}
+.currentGuess > ul {
+  display: inline-block;
+  margin-right: 25px;
+}
+.currentGuess .peg {
+  cursor: pointer;
+}
+button.submitGuess {
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  color:white;
+  text-align: center;
+  display: inline-block;
+  vertical-align: top;
+  box-shadow: 0 2px 3px 0 rgba(0,0,0,0.5);
+  border: none;
+  background-color: var(--main-bg-color);
+  user-select: none;
+  cursor: pointer;
+}
+button.submitGuess:disabled {
+  background: #999;
 }
 
 .peg.code {
-  width: 10px;
-  height: 10px;
+  width: 30px;
+  height: 30px;
+}
+.peg.key {
+  width: 15px;
+  height: 15px;
+  margin: 2px 3px;
+  display: none;
 }
 
-.red {
-  background: red;
+.white, .peg.correct {
+  background: #fffef9;
+  display: inline-block;
+}
+.red, .peg.inPlace {
+  background: #ff3a00;
+  display: inline-block;
 }
 .blue {
-  background: blue;
+  background: #9fdfe1;
 }
 .green {
-  background: green;
+  background: #3a9069;
 }
 .yellow {
-  background: yellow;
+  background: #ffff0b;
 }
-.pink {
-  background: pink;
-}
-.brown {
-  background: brown;
+.purple {
+  background: #e763b9;
 }
 .black {
-  background: black;
-}
-.white {
-  background: white;
+  background: #333333;
 }

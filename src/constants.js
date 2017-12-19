@@ -5,10 +5,8 @@ module.exports = {
     'blue',
     'green',
     'yellow',
-    'pink',
-    'brown',
-    'black',
-    'white'
+    'purple',
+    'black'
   ],
 
   SETTINGS: {
@@ -17,10 +15,10 @@ module.exports = {
   },
 
   DEFAULT_SETTINGS: {
-    CODE_LENGTH: 4,
-    ALLOW_DUPLICATES: false
+    ALLOW_DUPLICATES: true
   },
 
+  CODE_LENGTH: 4,
   NUMBER_OF_GUESSES: 10 // Make customizible?
 
 }
