@@ -118,6 +118,7 @@ li.PreviousGuess ul.keyPegs {
   margin-bottom: 25px;
   box-shadow: 0 2px 5px 1px rgba(0,0,0,0.5) inset;
   border-radius: 20px;
+  position: relative;
 }
 .currentGuess > ul {
   display: inline-block;
@@ -126,7 +127,7 @@ li.PreviousGuess ul.keyPegs {
 .currentGuess .peg {
   cursor: pointer;
 }
-button.submitGuess {
+button {
   border-radius: 50%;
   height: 30px;
   width: 30px;
@@ -136,12 +137,19 @@ button.submitGuess {
   vertical-align: top;
   box-shadow: 0 2px 3px 0 rgba(0,0,0,0.5);
   border: none;
-  background-color: var(--main-bg-color);
   user-select: none;
   cursor: pointer;
 }
+button.submitGuess {
+  background-color: var(--main-bg-color);
+}
 button.submitGuess:disabled {
   background: #999;
+}
+button.resetGame {
+  background-color: #3a9069;
+  position: relative;
+  left: 35px;
 }
 
 .peg.code {

@@ -41,6 +41,7 @@ function PlayerInput(props) {
   return <div className="currentGuess">
       <ul>{inputs}</ul>
       <button onClick={props.submitGuess} disabled={props.submitDisabled} className="submitGuess">✓</button>
+      <button className="resetGame" onClick={props.reset}>R</button>
     </div>;
 }
 
@@ -56,13 +57,23 @@ class Board extends Component {
     }
 
     this.submitGuess = this.submitGuess.bind(this);
+    this.reset = this.reset.bind(this);
   }
 
   render() {
     const history = this.state.history;
     const current = history[this.state.guessNumber];
 
-    const submitDisabled = this.state.currentGuess.indexOf(null) >= 0;
+    let submitDisabled = this.state.currentGuess.indexOf(null) >= 0;
+    console.log(this.state.guessNumber);
+
+    if (current && current.keyPegs[1] === CONSTANTS.CODE_LENGTH) {
+      alert('You Won!');
+      submitDisabled = true;
+    } else if (this.state.guessNumber >= CONSTANTS.NUMBER_OF_GUESSES) {
+      alert('You Lost!');
+      submitDisabled = true;
+    }
 
     return <div className="Board">
       <ul className="PreviousGuesses">
@@ -74,7 +85,8 @@ class Board extends Component {
         currentGuess={this.state.currentGuess}
         submitDisabled={submitDisabled}
         handlePegChange={(i) => this.handlePegChange(i)}
-        submitGuess={this.submitGuess}/>
+        submitGuess={this.submitGuess}
+        reset={this.reset}/>
     </div>;
   }
 
@@ -90,38 +102,22 @@ class Board extends Component {
   }
 
   submitGuess() {
-    const history = this.state.history.slice();
-    const current = history[this.state.guessNumber];
-    current.codePegs = this.state.currentGuess.slice();
-    current.keyPegs = checkWinner(this.state.code, current.codePegs);
-
-    var endGame = false;
-    console.log(this.state.guessNumber);
-
-    if (current.keyPegs === true) {
-      alert('winner!');
-      endGame = true;
-    }
-    if ((this.state.guessNumber + 1) >= CONSTANTS.NUMBER_OF_GUESSES) {
-      alert('loser!');
-      endGame = true;
-    }
-
-    if (endGame) {
-      this.setState({
-        settings: this.props.settings,
-        code: getNewCode(),
-        history: getEmptyGuesses(),
-        currentGuess: Array(CONSTANTS.CODE_LENGTH).fill(null),
-        guessNumber: 0
-      });
-      this.props.incrementWins(current.keyPegs === true);
-      return;
-    }
-
+    const history = this.state.history;
+    history[this.state.guessNumber].codePegs = this.state.currentGuess.slice();
+    history[this.state.guessNumber].keyPegs = checkWinner(this.state.code, history[this.state.guessNumber].codePegs);
     this.setState({
       history: history,
-      guessNumber: this.state.guessNumber + 1
+      guessNumber: ++this.state.guessNumber
+    });
+  }
+
+  reset() {
+    this.setState({
+      settings: this.props.settings,
+      code: getNewCode(),
+      history: getEmptyGuesses(),
+      currentGuess: Array(CONSTANTS.CODE_LENGTH).fill(null),
+      guessNumber: 0
     });
   }
 }
@@ -201,9 +197,5 @@ function checkWinner(code, guess) {
     if (guess[x] === code[x]) numInPlace++;
   }
 
-  if (numInPlace === code.length) {
-    return true;
-  } else {
-    return [numCorrect, numInPlace];
-  }
+  return [numCorrect, numInPlace];
 }
