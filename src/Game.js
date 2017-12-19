@@ -65,7 +65,6 @@ class Board extends Component {
     const current = history[this.state.guessNumber];
 
     let submitDisabled = this.state.currentGuess.indexOf(null) >= 0;
-    console.log(this.state.guessNumber);
 
     if (current && current.keyPegs[1] === CONSTANTS.CODE_LENGTH) {
       alert('You Won!');
