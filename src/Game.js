@@ -2,22 +2,26 @@ import React, { Component } from 'react';
 import CONSTANTS from './constants';
 import './Game.css';
 
+// Covers both code and key pegs
 function Peg(props) {
-  const classes = `peg ${props.color} ${props.type} ${props.classes}`;
+  let classes = `peg ${props.color} ${props.type} ${props.classes}`;
   return (
     <i className={classes} />
   );
 }
 
+// iterable list of pegs in a previous guess
 function PreviousGuessPegs(props) {
   return props.pegs.map((peg, i) => {
     return <li key={i}><Peg color={peg} type="code"/></li>;
   });
 }
 
+// list of previous guesses with key pegs,
+// includes guesses not yet made (empty) for the visuals
 function PreviousGuesses(props) {
-  const history = props.history.slice(0, props.history.length).map((guess, i) => {
-    const keyPegs = [];
+  let history = props.history.slice(0, props.history.length).map((guess, i) => {
+    let keyPegs = [];
     guess.codePegs.forEach((peg, i) => { // codePegs length will be the same as code length here, right?
       let classes = (guess.keyPegs[0] > i ? ' correct' : '') + (guess.keyPegs[1] > i ? ' inPlace' : '');
       keyPegs.push(<li key={i}><Peg type="key" classes={classes} /></li>);
@@ -31,6 +35,7 @@ function PreviousGuesses(props) {
   return <ul>{history}</ul>;
 }
 
+// guess input component
 function PlayerInput(props) {
   const inputs = props.currentGuess.map((color, i) => {
     return <li key={i}  onClick={() => props.handlePegChange(i)}>
@@ -52,6 +57,10 @@ class Board extends Component {
       settings: props.settings,
       code: getNewCode(),
       history: getEmptyGuesses(),
+
+      // state.currentGuess is an empty list the length of the code.
+      // it's meant to be filled by clicking on an individual spot, which will change that peg color.
+      //Persists between guesses for ease of use.
       currentGuess: Array(CONSTANTS.CODE_LENGTH).fill(null),
       guessNumber: 0
     }
@@ -64,8 +73,11 @@ class Board extends Component {
     const history = this.state.history;
     const current = history[this.state.guessNumber];
 
+    // disable the submit button if not all currentGuess pegs are selected
     let submitDisabled = this.state.currentGuess.indexOf(null) >= 0;
 
+    // TODO: better win / loss indicators than an alert box
+    // Should I be changing the submitDisabled value in render()? Seems like it should be done earlier in the lifecycle
     if (this.state.guessNumber > 0 && history[this.state.guessNumber - 1].keyPegs[1] === CONSTANTS.CODE_LENGTH) {
       alert('You Won!');
       submitDisabled = true;
@@ -121,10 +133,6 @@ class Board extends Component {
   }
 }
 
-function Settings(props) {
- return <div></div>;
-}
-
 class App extends Component {
   // TODO: Implement settings
 
@@ -137,6 +145,7 @@ class App extends Component {
     }
   }
 
+  // TODO: Implement stats, maybe use localstorage?
   incrementWins(isWin) {
     this.setState({
       wins: isWin ? this.state.wins + 1 : this.state.wins,
@@ -152,10 +161,6 @@ class App extends Component {
         <Board
           settings={this.state.settings}
           incrementWins={i => this.incrementWins(i)} />
-        {/*
-        <Settings setting={this.state.settings} />
-        <div className="stats">{this.state.wins} Wins, {this.state.losses} Losses, {winAvg}%</div>
-        */}
       </div>
     );
   }
@@ -163,11 +168,15 @@ class App extends Component {
 
 export default App;
 
+// Generate a new random code of a specified length. Returns an array of colors (strings).
 function getNewCode() {
   return [...new Array(CONSTANTS.CODE_LENGTH)]
     .map(() => CONSTANTS.COLORS[Math.floor((Math.random() * (CONSTANTS.COLORS.length)) + 1) - 1]);
 }
 
+// Returns an array of empty guesses, the length of the number of allowed guesses.
+// Used for showing the empty peg holes on the board instead of creating a new guess every time.
+// Could possibly generate the empty ones in the Board render() call instead.
 function getEmptyGuesses() {
   return [...new Array(CONSTANTS.NUMBER_OF_GUESSES)]
     .map(() => {
@@ -178,6 +187,7 @@ function getEmptyGuesses() {
     });
 }
 
+// Returns how many were the correct color and how many were in the correct place.
 function checkWinner(code, guess) {
   const check = code.slice();
   let numCorrect = 0;
