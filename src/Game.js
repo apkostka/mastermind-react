@@ -169,14 +169,13 @@ function getNewCode() {
 }
 
 function getEmptyGuesses() {
-  let guesses = [];
-  for (let i = 0; i < CONSTANTS.NUMBER_OF_GUESSES; i++){
-    guesses.push({
-      codePegs: Array(CONSTANTS.CODE_LENGTH).fill(null),
-      keyPegs: [0,0]
+  return [...new Array(CONSTANTS.NUMBER_OF_GUESSES)]
+    .map(() => {
+      return {
+        codePegs: Array(CONSTANTS.CODE_LENGTH).fill(null),
+        keyPegs: [0,0]
+      }
     });
-  };
-  return guesses;
 }
 
 function checkWinner(code, guess) {
