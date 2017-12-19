@@ -66,7 +66,7 @@ class Board extends Component {
 
     let submitDisabled = this.state.currentGuess.indexOf(null) >= 0;
 
-    if (current && current.keyPegs[1] === CONSTANTS.CODE_LENGTH) {
+    if (this.state.guessNumber > 0 && history[this.state.guessNumber - 1].keyPegs[1] === CONSTANTS.CODE_LENGTH) {
       alert('You Won!');
       submitDisabled = true;
     } else if (this.state.guessNumber >= CONSTANTS.NUMBER_OF_GUESSES) {
