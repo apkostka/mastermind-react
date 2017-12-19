@@ -3,7 +3,7 @@ import CONSTANTS from './constants';
 import './Game.css';
 
 function Peg(props) {
-  const classes = `peg ${props.color} ${props.type}`;
+  const classes = `peg ${props.color} ${props.type} ${props.classes}`;
   return (
     <i className={classes} />
   );
@@ -19,8 +19,8 @@ function PreviousGuesses(props) {
   const history = props.history.slice(0, props.history.length).map((guess, i) => {
     const keyPegs = [];
     guess.codePegs.forEach((peg, i) => { // codePegs length will be the same as code length here, right?
-      let classes = 'peg key' + (guess.keyPegs[0] > i ? ' correct' : '') + (guess.keyPegs[1] > i ? ' inPlace' : '');
-      keyPegs.push(<li className={classes} key={i} />);
+      let classes = (guess.keyPegs[0] > i ? ' correct' : '') + (guess.keyPegs[1] > i ? ' inPlace' : '');
+      keyPegs.push(<li key={i}><Peg type="key" classes={classes} /></li>);
     });
     return <li key={i} className="PreviousGuess">
       <ul className="codePegs"><PreviousGuessPegs pegs={guess.codePegs} id={i}/></ul>
@@ -180,11 +180,11 @@ function getEmptyGuesses() {
 
 function checkWinner(code, guess) {
   const check = code.slice();
-  var numCorrect = 0;
-  var numInPlace = 0;
+  let numCorrect = 0;
+  let numInPlace = 0;
 
   for (let x in guess) {
-    var match = check.indexOf(guess[x]);
+    let match = check.indexOf(guess[x]);
     if (match >= 0) {
       check.splice(match, 1);
       numCorrect++;
